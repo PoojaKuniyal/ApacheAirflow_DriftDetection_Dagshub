@@ -1,0 +1,37 @@
+
+# --- Git & System ---
+.git/
+.DS_Store
+.env
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+
+# --- Airflow ---
+airflow.cfg
+airflow.db
+airflow_settings.yaml
+airflow-webserver.pid
+webserver_config.py
+logs/
+
+# --- Astronomer ---
+astro/
+.astro/
+
+# --- Project-specific ---
+plugins/
+include/
+tests/
+
+# --- Other ---
+*.log
+
+artifacts/models/*.pkl
+artifacts/processed/*.pkl

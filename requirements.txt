@@ -1,0 +1,20 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+imbalanced-learn
+setuptools
+apache-airflow-providers-postgres
+psycopg2-binary
+flask
+prometheus_client
+mlflow==3.14.0
+evidently
+
+# Do not install this in Astro Runtime 3.2-5.
+# That image uses Python 3.13, while alibi-detect 0.13.0 pulls older ML
+# dependencies that do not reliably build for Python 3.13.
+# Run drift monitoring in a separate Python 3.10/3.11 environment, or switch
+# the Astro image to an older Python runtime before enabling this again.
+# alibi-detect==0.13.0

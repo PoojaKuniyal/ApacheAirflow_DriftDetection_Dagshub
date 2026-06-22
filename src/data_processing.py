@@ -12,12 +12,15 @@ from scipy.stats import skew
 from sklearn.preprocessing import PowerTransformer
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
+import mlflow
+import mlflow.sklearn
+from src.artifact_store import processed_artifact_run, save_joblib_artifact
 
 logger = get_logger(__name__)
 
 class DataProcessing:
     def __init__(self, db_params):
-        self.db_params = db_params # environment variables (DB_CONFIG) is used for local testing and Airflow Connections when running in Airflow
+        self.db_params = db_params # environment variables (DB_CONFIG) is used for local testing; Airflow Connections when running in Airflow
         self.df = None
         self.X_train = None
         self.X_test = None
@@ -32,7 +35,7 @@ class DataProcessing:
             engine = sqlalchemy.create_engine(
                 f"postgresql+psycopg2://{self.db_params['user']}:{self.db_params['password']}@{self.db_params['host']}:{self.db_params['port']}/{self.db_params['dbname']}"
             )
-            self.df = pd.read_sql('SELECT * FROM public."ESG"', engine)
+            self.df = pd.read_sql('SELECT * FROM public."ESG"', engine) # ESG table exists in the database and can be viewed in DBeaver
 
             logger.info("Database Connection Established and data read successfully...")
             return self.df 
@@ -161,15 +164,15 @@ class DataProcessing:
                 os.path.dirname(POWER_TRANSFORMER_PATH),
                 exist_ok=True
             )
-            joblib.dump(pt, POWER_TRANSFORMER_PATH)
+            save_joblib_artifact(pt, POWER_TRANSFORMER_PATH)
 
             os.makedirs(
                 os.path.dirname(ENCODED_PATH),
                 exist_ok=True
             )
-            joblib.dump(encoder, ENCODED_PATH)
+            save_joblib_artifact(encoder, ENCODED_PATH)
 
-            logger.info('Successfully imputed, transformed and encoded..')
+            logger.info('Successfully imputed, transformed, encoded and saved..')
         
         except Exception as e:
             logger.error(f"Error while imputing, transforming and encoding {e}")
@@ -181,11 +184,10 @@ class DataProcessing:
             smote = SMOTE(random_state=67)
             self.X_train_res, self.y_train_res = smote.fit_resample(self.X_train,self.y_train)
             
-            joblib.dump(self.X_train_res, X_TRAIN_PATH)
-            joblib.dump(self.X_test, X_TEST_PATH)
-
-            joblib.dump(self.y_train_res, Y_TRAIN_PATH)
-            joblib.dump(self.y_test, Y_TEST_PATH)
+            save_joblib_artifact(self.X_train_res, X_TRAIN_PATH)
+            save_joblib_artifact(self.X_test, X_TEST_PATH)
+            save_joblib_artifact(self.y_train_res, Y_TRAIN_PATH)
+            save_joblib_artifact(self.y_test, Y_TEST_PATH)
 
         except Exception as e:
             raise CustomException(str(e),sys) 
@@ -194,11 +196,12 @@ class DataProcessing:
     def run(self):
         try:
             logger.info("Starting data processing pipeline..")
-            self.connect_to_db_read_data() 
-            self.process_feature_engineer_data()
-            self.split_data()
-            self.transform_encode()
-            self.apply_smote()
+            with processed_artifact_run(run_name="data-processing-artifacts"):
+                self.connect_to_db_read_data()
+                self.process_feature_engineer_data()
+                self.split_data()
+                self.transform_encode()
+                self.apply_smote()
             
             logger.info("End of data processing pipeline")
             return (

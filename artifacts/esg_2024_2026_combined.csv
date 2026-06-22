@@ -1,0 +1,61 @@
+year,company,ticker,sector,country,revenue_usd_bn,scope1_emissions_mt_co2e,scope2_emissions_mt_co2e,scope3_emissions_mt_co2e,total_s1_s2_mt_co2e,yoy_scope1_change_pct,carbon_intensity_tco2e_per_musd,esg_score_0_100,cdp_climate_score,net_zero_target_set,sbti_committed,emissions_disclosed,third_party_verified,greenwashing_flag
+2025,ExxonMobil,XOM,Energy,USA,533.06,116.7,8.46,967.78,125.16,13.28,0.23,46.6,A-,Yes,Yes,Yes,No,0
+2025,Chevron,CVX,Energy,USA,259.73,63.24,4.56,553.46,67.8,-3.93,0.26,51.6,A-,Yes,Yes,Yes,No,0
+2025,Shell,SHEL,Energy,GBR,513.58,70.94,4.01,551.91,74.95,9.14,0.15,63.9,A,Yes,Yes,Yes,Yes,0
+2025,BP,BP,Energy,GBR,386.38,44.92,3.46,491.06,48.39,-19.75,0.13,67.9,A,Yes,Yes,Yes,Yes,0
+2025,TotalEnergies,TTE,Energy,FRA,301.65,44.26,3.23,509.33,47.49,-7.18,0.16,74.4,A-,Yes,Yes,Yes,No,0
+2025,ConocoPhillips,COP,Energy,USA,74.3,23.17,1.99,248.84,25.16,-3.66,0.34,53.3,A,Yes,Yes,Yes,No,0
+2025,Eni,ENI,Energy,ITA,190.24,44.63,3.22,324.63,47.85,13.8,0.25,82.4,A,Yes,Yes,Yes,Yes,1
+2025,Equinor,EQNR,Energy,NOR,107.47,11.36,0.78,103.97,12.14,3.91,0.11,85.3,A-,Yes,Yes,Yes,Yes,1
+2025,Occidental Petroleum,OXY,Energy,USA,30.75,16.86,1.13,162.57,17.99,3.19,0.58,40.9,A,Yes,Yes,Yes,No,0
+2025,Pioneer Natural Resources,PXD,Energy,USA,5.86,9.93,0.68,86.88,10.61,9.48,1.81,39.6,B,Yes,Yes,Yes,Yes,0
+2025,Duke Energy,DUK,Utilities,USA,21.12,54.99,2.17,27.77,57.16,-13.85,2.71,70.5,A,Yes,No,Yes,Yes,0
+2025,NextEra Energy,NEE,Utilities,USA,36.25,26.33,0.99,12.93,27.32,-7.98,0.75,100.0,A-,Yes,Yes,Yes,No,0
+2025,Southern Company,SO,Utilities,USA,22.9,53.26,1.76,29.74,55.02,-4.57,2.4,76.8,A,Yes,Yes,Yes,Yes,0
+2025,Dominion Energy,D,Utilities,USA,18.23,28.2,1.13,13.47,29.33,-14.82,1.61,75.6,A-,Yes,No,Yes,Yes,0
+2025,Enel,ENEL,Utilities,ITA,118.34,46.17,1.76,25.12,47.93,-10.34,0.41,100.0,A,Yes,Yes,Yes,Yes,0
+2025,E.ON,EOAN,Utilities,DEU,88.8,45.41,1.95,22.02,47.36,-14.17,0.53,99.1,A,Yes,No,Yes,No,0
+2025,American Electric Power,AEP,Utilities,USA,19.37,58.73,2.14,29.13,60.87,-7.7,3.14,71.5,A-,Yes,Yes,Yes,Yes,0
+2025,Xcel Energy,XEL,Utilities,USA,16.09,25.01,0.98,10.16,25.99,-4.98,1.62,88.9,A,Yes,Yes,Yes,No,0
+2025,RWE,RWE,Utilities,DEU,53.0,49.16,2.1,23.95,51.26,-12.38,0.97,69.5,A,Yes,Yes,Yes,Yes,0
+2025,Iberdrola,IBE,Utilities,ESP,55.51,15.42,0.55,8.23,15.98,-11.76,0.29,100.0,A,Yes,No,Yes,Yes,0
+2025,General Electric,GE,Industrials,USA,112.61,18.13,4.18,65.89,22.31,-7.65,0.2,67.7,A-,Yes,No,Yes,No,0
+2025,Honeywell,HON,Industrials,USA,49.17,4.88,1.15,14.44,6.03,-5.15,0.12,79.8,A,Yes,No,Yes,Yes,0
+2025,Caterpillar,CAT,Industrials,USA,72.78,4.17,0.88,12.38,5.05,1.44,0.07,52.2,A,Yes,Yes,Yes,Yes,0
+2025,3M,MMM,Industrials,USA,32.65,2.02,0.45,6.15,2.48,-6.71,0.08,67.7,A,Yes,No,Yes,Yes,0
+2025,Siemens,SIE,Industrials,DEU,98.17,0.81,0.2,3.08,1.0,-10.2,0.01,100.0,A,Yes,Yes,Yes,Yes,0
+2025,Emerson Electric,EMR,Industrials,USA,31.01,1.15,0.25,3.51,1.4,-1.45,0.05,60.5,A,Yes,No,Yes,Yes,0
+2025,Cummins,CMI,Industrials,USA,21.85,1.26,0.28,4.02,1.54,-1.32,0.07,68.3,A,Yes,Yes,Yes,Yes,0
+2025,BASF,BAS,Industrials,DEU,92.58,16.2,3.75,60.01,19.96,-11.23,0.22,84.1,A,Yes,Yes,No,Yes,0
+2025,ArcelorMittal,MT,Industrials,LUX,96.68,149.27,35.05,471.71,184.32,-5.28,1.91,46.0,A,Yes,No,Yes,No,0
+2025,Holcim,HOLN,Industrials,CHE,38.69,97.69,22.86,302.59,120.55,-1.08,3.12,61.5,A-,Yes,No,Yes,Yes,0
+2026,ExxonMobil,XOM,Energy,USA,673.41,125.97,6.79,945.57,132.76,7.94,0.2,54.5,A-,Yes,Yes,Yes,No,0
+2026,Chevron,CVX,Energy,USA,316.4,65.59,3.45,541.3,69.04,3.71,0.22,56.2,A,Yes,Yes,Yes,No,0
+2026,Shell,SHEL,Energy,GBR,574.82,80.1,3.57,540.56,83.67,12.92,0.15,72.8,A,Yes,Yes,Yes,Yes,0
+2026,BP,BP,Energy,GBR,477.23,47.5,2.85,483.87,50.34,5.73,0.11,75.8,A,Yes,Yes,Yes,Yes,1
+2026,TotalEnergies,TTE,Energy,FRA,345.6,38.12,3.53,498.72,41.65,-13.88,0.12,79.2,A-,Yes,Yes,Yes,No,0
+2026,ConocoPhillips,COP,Energy,USA,83.11,25.81,2.12,250.9,27.93,11.4,0.34,58.7,A,Yes,Yes,Yes,No,0
+2026,Eni,ENI,Energy,ITA,222.55,47.04,3.43,347.93,50.47,5.41,0.23,90.9,A,Yes,Yes,Yes,Yes,1
+2026,Equinor,EQNR,Energy,NOR,132.02,9.42,0.63,111.73,10.05,-17.06,0.08,92.5,A-,Yes,Yes,Yes,Yes,0
+2026,Occidental Petroleum,OXY,Energy,USA,36.11,19.04,1.23,149.72,20.27,12.9,0.56,46.0,A,Yes,Yes,Yes,No,0
+2026,Pioneer Natural Resources,PXD,Energy,USA,7.02,9.5,0.75,77.67,10.25,-4.31,1.46,42.7,A-,Yes,Yes,Yes,Yes,0
+2026,Duke Energy,DUK,Utilities,USA,22.72,52.08,1.95,27.35,54.03,-5.3,2.38,82.1,A,Yes,No,Yes,Yes,0
+2026,NextEra Energy,NEE,Utilities,USA,39.97,22.7,0.85,11.98,23.55,-13.78,0.59,100.0,A,Yes,Yes,Yes,No,0
+2026,Southern Company,SO,Utilities,USA,26.28,48.64,1.65,28.06,50.29,-8.67,1.91,85.3,A,Yes,Yes,Yes,Yes,0
+2026,Dominion Energy,D,Utilities,USA,20.25,26.42,1.05,12.43,27.47,-6.3,1.36,85.6,A,Yes,No,Yes,Yes,0
+2026,Enel,ENEL,Utilities,ITA,123.39,43.12,1.45,24.97,44.57,-6.61,0.36,100.0,A,Yes,Yes,Yes,Yes,0
+2026,E.ON,EOAN,Utilities,DEU,101.29,40.78,1.56,21.86,42.35,-10.19,0.42,100.0,A,Yes,No,Yes,No,0
+2026,American Electric Power,AEP,Utilities,USA,22.2,57.28,1.99,27.07,59.26,-2.47,2.67,80.4,A-,Yes,Yes,Yes,Yes,0
+2026,Xcel Energy,XEL,Utilities,USA,17.21,22.84,0.84,9.55,23.68,-8.69,1.38,100.0,A,Yes,Yes,Yes,No,0
+2026,RWE,RWE,Utilities,DEU,60.54,42.24,1.75,23.16,43.98,-14.08,0.73,78.1,A,Yes,Yes,Yes,Yes,0
+2026,Iberdrola,IBE,Utilities,ESP,59.28,13.7,0.47,8.11,14.17,-11.16,0.24,100.0,A,Yes,No,Yes,Yes,0
+2026,General Electric,GE,Industrials,USA,123.17,17.46,3.7,63.38,21.16,-3.71,0.17,70.2,A,Yes,No,Yes,No,0
+2026,Honeywell,HON,Industrials,USA,54.69,4.67,1.05,14.44,5.72,-4.33,0.1,84.7,A,Yes,No,Yes,Yes,0
+2026,Caterpillar,CAT,Industrials,USA,79.56,4.17,0.84,11.81,5.01,-0.06,0.06,55.5,A,Yes,Yes,Yes,Yes,0
+2026,3M,MMM,Industrials,USA,33.91,1.95,0.38,5.94,2.34,-3.33,0.07,72.0,A,Yes,No,Yes,Yes,0
+2026,Siemens,SIE,Industrials,DEU,103.65,0.78,0.17,2.85,0.96,-3.14,0.01,100.0,A,Yes,Yes,Yes,Yes,0
+2026,Emerson Electric,EMR,Industrials,USA,32.95,1.03,0.23,3.5,1.26,-10.09,0.04,62.8,A,Yes,No,Yes,Yes,0
+2026,Cummins,CMI,Industrials,USA,23.73,1.12,0.24,3.91,1.36,-10.72,0.06,72.5,A,Yes,Yes,Yes,Yes,0
+2026,BASF,BAS,Industrials,DEU,100.67,16.02,3.63,58.31,19.65,-1.11,0.2,87.0,A,Yes,Yes,No,Yes,0
+2026,ArcelorMittal,MT,Industrials,LUX,106.5,137.42,31.64,437.67,169.06,-7.94,1.59,47.2,A,Yes,No,Yes,No,0
+2026,Holcim,HOLN,Industrials,CHE,43.2,98.22,21.34,290.76,119.56,0.54,2.77,63.5,A-,Yes,No,Yes,Yes,0

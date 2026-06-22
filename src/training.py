@@ -7,8 +7,6 @@ from config.paths_config import *
 from config.model_parameters import *
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
-#import pickle
-import os
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 
 import mlflow
@@ -17,6 +15,7 @@ import mlflow.sklearn
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 import pandas as pd
+from src.artifact_store import load_joblib_artifact, save_joblib_artifact
 
 logger = get_logger(__name__)
 
@@ -31,10 +30,10 @@ class ModelTraining:
 
     def load_data(self):
         try:
-            X_train = joblib.load(X_TRAIN_PATH)
-            X_test = joblib.load(X_TEST_PATH)
-            y_train = joblib.load(Y_TRAIN_PATH)
-            y_test = joblib.load(Y_TEST_PATH)
+            X_train = load_joblib_artifact(X_TRAIN_PATH)
+            X_test = load_joblib_artifact(X_TEST_PATH)
+            y_train = load_joblib_artifact(Y_TRAIN_PATH)
+            y_test = load_joblib_artifact(Y_TEST_PATH)
 
             logger.info("Data loaded successfully...")
             return X_train,X_test,y_train,y_test
@@ -111,12 +110,6 @@ class ModelTraining:
            
             os.environ["MLFLOW_ALLOW_FILE_STORE"] = "true"
 
-            # local MLflow tracking URI like "file:///C:/Users/Lenovo/mlruns" works locally but not inside **Astro. 
-            # USING A SEPERATE MLFLOW container in docker (easy viewing of ML flow UI) 
-            # Point the training code to this server inside docker because Airflow DAG runs inside Docker and needs to reach the MLflow server running on your Windows host.
-            mlflow.set_tracking_uri("http://host.docker.internal:5000")  # so kept this uri
-            print("Tracking URI:", mlflow.get_tracking_uri()) 
-
             # Set experiment name
             mlflow.set_experiment("RF_Experiment1") # experiment should be set before starting the run
 
@@ -130,12 +123,22 @@ class ModelTraining:
                 best_rf_model, best_params = self.train_model(X_train,y_train)
                 metrics = self.evaluate(best_rf_model, X_test, y_test)
                 self.save_model(best_rf_model)
+                # 🔑 Dump metrics dynamically instead of hardcoding
+                # Define the directory and file path separately
+                BASELINE_DIR = PROCESSED
+                BASELINE_FILE = os.path.join(BASELINE_DIR, "baseline.pkl")
+
+                # Make sure the directory exists
+                os.makedirs(BASELINE_DIR, exist_ok=True)
+
+                # Dump metrics into the file
+                save_joblib_artifact(metrics, BASELINE_FILE)
 
                 logger.info('Logging the model into ML flow')
                 mlflow.sklearn.log_model(
                     sk_model=best_rf_model,
                     name="random_forest_model",
-                    serialization_format="skops" 
+                    #serialization_format="skops" 
                 )
 
                 logger.info('Logging param and metrics to ML Flow')
