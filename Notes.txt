@@ -1,0 +1,31 @@
+commands for running Astro (and then RUN DAGS)
+
+astro dev init   (for the initialization just once)
+astro dev start   (each time code is updated or want to run the DAG pipeline)
+astro dev restart  (when something breaks and want to start a fresh)
+
+
+
+
+Add DAGSHUB credentials to .env
+
+Airflow tasks run inside Docker containers, which means terminal environment variables are not automatically available inside those containers. To ensure that all Airflow DAGs have access to the required credentials, you need to add the DAGSHUB credentials to the .env file.
+
+Astro relies on environment variables defined in .env to pass them into the containerized tasks. Without this step, your DAGs won’t be able to authenticate with DAGSHUB.
+Astro automatically loads variables from .env into the containers.
+
+.env
+
+MLFLOW_TRACKING_URI=https://dagshub.com/<username>/<repo>.mlflow
+MLFLOW_TRACKING_USERNAME=<username>
+MLFLOW_TRACKING_PASSWORD=<token>
+
+
+Open the UI from inside the DAG
+
+
+
+
+
+
+
