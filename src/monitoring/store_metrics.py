@@ -15,6 +15,9 @@ from src.monitoring.model_drift import ModelDriftMonitor
 import mlflow
 import mlflow.sklearn
 from src.monitoring.mlflow_logger import log_metrics_to_mlflow
+from config.mlflow_config import configure_mlflow
+
+configure_mlflow()
 
 Base = declarative_base()
 

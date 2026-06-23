@@ -27,6 +27,9 @@ import mlflow
 from mlflow.tracking import MlflowClient
 
 from src.logger import get_logger
+from config.mlflow_config import configure_mlflow
+
+configure_mlflow()
 
 logger = get_logger(__name__)
 

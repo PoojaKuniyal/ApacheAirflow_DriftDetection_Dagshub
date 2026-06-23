@@ -15,6 +15,9 @@ from imblearn.over_sampling import SMOTE
 import mlflow
 import mlflow.sklearn
 from src.artifact_store import processed_artifact_run, save_joblib_artifact
+from config.mlflow_config import configure_mlflow
+
+configure_mlflow()
 
 logger = get_logger(__name__)
 

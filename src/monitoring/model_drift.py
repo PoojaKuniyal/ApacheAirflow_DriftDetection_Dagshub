@@ -10,6 +10,9 @@ from sklearn.metrics import (
     recall_score,
     f1_score
 )
+from config.mlflow_config import configure_mlflow
+
+configure_mlflow()
 
 class ModelDriftMonitor:
 

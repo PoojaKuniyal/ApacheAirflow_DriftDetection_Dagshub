@@ -16,6 +16,9 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
 import pandas as pd
 from src.artifact_store import load_joblib_artifact, save_joblib_artifact
+from config.mlflow_config import configure_mlflow
+
+configure_mlflow()
 
 logger = get_logger(__name__)
 
