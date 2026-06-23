@@ -4,15 +4,11 @@ from config.paths_config import *
 import pandas as pd
 from src.artifact_store import load_joblib_artifact
 
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score
-)
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from config.mlflow_config import configure_mlflow
 
 configure_mlflow()
+
 
 class ModelDriftMonitor:
 
@@ -20,13 +16,13 @@ class ModelDriftMonitor:
 
         self.model = joblib.load(model_path)
         self.processed_current_data = load_joblib_artifact(processed_current_data)
-        self.current_data = current_data 
-        
+        self.current_data = current_data
+
     def evaluate_current_data(self):
 
         X_current = self.processed_current_data
         data = pd.read_csv(self.current_data)
-        y_current = data['greenwashing_flag'] 
+        y_current = data["greenwashing_flag"]
 
         y_pred = self.model.predict(X_current)
 
@@ -37,11 +33,11 @@ class ModelDriftMonitor:
         except FileNotFoundError:
             # First run: no baseline yet
             BASELINE_METRICS = {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
-    }
+                "accuracy": 0.0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+            }
             print("⚠️ No baseline metrics found, starting fresh.")
 
         # Compute current metrics
@@ -65,10 +61,11 @@ class ModelDriftMonitor:
         return metrics
 
 
-if __name__ =='__main__':
+if __name__ == "__main__":
 
     monitor = ModelDriftMonitor(
-        MODEL_OUTPUT_PATH, CURRENT_PROCESSED_DATA, CURRENT_DATA_PATH)
+        MODEL_OUTPUT_PATH, CURRENT_PROCESSED_DATA, CURRENT_DATA_PATH
+    )
 
     metrics = monitor.evaluate_current_data()
 

@@ -8,7 +8,12 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from config.database_config import DB_CONFIG
-from config.paths_config import CURRENT_DATA_PATH, CURRENT_PROCESSED_DATA, MODEL_OUTPUT_PATH, X_TRAIN_PATH
+from config.paths_config import (
+    CURRENT_DATA_PATH,
+    CURRENT_PROCESSED_DATA,
+    MODEL_OUTPUT_PATH,
+    X_TRAIN_PATH,
+)
 from src.monitoring.data_drift import DataDriftMonitor
 from src.monitoring.model_drift import ModelDriftMonitor
 
@@ -23,12 +28,12 @@ Base = declarative_base()
 
 
 class MonitoringMetrics(Base):
-    __tablename__ = "monitoring_metrics"    
+    __tablename__ = "monitoring_metrics"
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     drift_score = Column(Float)
     drift_detected = Column(Boolean)
-    drifted_features = Column(String)   # store as comma-separated string or JSON
+    drifted_features = Column(String)  # store as comma-separated string or JSON
     accuracy = Column(Float)
     precision = Column(Float)
     recall = Column(Float)
@@ -44,7 +49,7 @@ class MetricsStore:
     def __init__(self, conn_string):
         self.engine = create_engine(conn_string)
         try:
-            Base.metadata.create_all(self.engine) # creates table if not exists
+            Base.metadata.create_all(self.engine)  # creates table if not exists
         except OperationalError as exc:
             raise RuntimeError(
                 "Could not connect to PostgreSQL. Start the database first "
@@ -65,12 +70,12 @@ class MetricsStore:
         accuracy_drop,
         precision_drop,
         recall_drop,
-        f1_drop
+        f1_drop,
     ):
         session = self.Session()
-       
+
         try:
-            
+
             metrics = MonitoringMetrics(
                 drift_score=drift_score,
                 drift_detected=drift_detected,
@@ -79,11 +84,10 @@ class MetricsStore:
                 precision=precision,
                 recall=recall,
                 f1=f1,
-
-                accuracy_drop=accuracy_drop, 
-                precision_drop= precision_drop,
-                recall_drop= recall_drop,
-                f1_drop= f1_drop
+                accuracy_drop=accuracy_drop,
+                precision_drop=precision_drop,
+                recall_drop=recall_drop,
+                f1_drop=f1_drop,
             )
 
             session.add(metrics)
@@ -108,9 +112,8 @@ class MetricsStore:
             "accuracy_drop": model_metrics["accuracy_drop"],
             "precision_drop": model_metrics["precision_drop"],
             "recall_drop": model_metrics["recall_drop"],
-            "f1_drop": model_metrics["f1_drop"]
+            "f1_drop": model_metrics["f1_drop"],
         }
-    
 
     @staticmethod
     def _format_drifted_features(drifted_features):
@@ -118,7 +121,8 @@ class MetricsStore:
             return ",".join(drifted_features)
         return str(drifted_features)
 
-####  If not using airflow we need below code - i.e local machine 
+
+####  If not using airflow we need below code - i.e local machine
 # def build_connection_string(db_config):
 #     database_url = os.getenv("DATABASE_URL")
 #     if database_url:
@@ -139,6 +143,7 @@ class MetricsStore:
 
 from airflow.hooks.base import BaseHook
 
+
 def build_connection_string():
 
     conn = BaseHook.get_connection("postgres_default")
@@ -157,15 +162,15 @@ def collect_monitoring_metrics():
     data_drift_metrics = data_monitor.detect_get_drift_summary()
 
     model_monitor = ModelDriftMonitor(
-        MODEL_OUTPUT_PATH,
-        CURRENT_PROCESSED_DATA,
-        CURRENT_DATA_PATH
+        MODEL_OUTPUT_PATH, CURRENT_PROCESSED_DATA, CURRENT_DATA_PATH
     )
     model_metrics = model_monitor.evaluate_current_data()
 
     return data_drift_metrics, model_metrics
 
+
 # without airflow conn_string = conn_string or build_connection_string(DB_CONFIG)
+
 
 def store_monitoring_metrics(conn_string=None):
     conn_string = conn_string or build_connection_string()
@@ -175,15 +180,9 @@ def store_monitoring_metrics(conn_string=None):
 
     # Store metrics in PostgreSQL
     store = MetricsStore(conn_string)
-    metric_id = store.save_metric_dicts(
-        data_drift_metrics,
-        model_metrics
-    )
-     # Log metrics to DagsHub / MLflow
-    log_metrics_to_mlflow(
-        data_drift_metrics,
-        model_metrics
-    )
+    metric_id = store.save_metric_dicts(data_drift_metrics, model_metrics)
+    # Log metrics to DagsHub / MLflow
+    log_metrics_to_mlflow(data_drift_metrics, model_metrics)
     return metric_id
 
 

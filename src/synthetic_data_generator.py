@@ -1,9 +1,9 @@
-""" Synthetic data based on sustainability concept to demonstrate DRIFT DETECTION
- -> greenwashing if all 3 true (companies matching all conditions then greenwashing = 1)
-    Revenue ↑
-    Emissions ↓
-    Carbon intensity ↓
-    ESG ↑
+"""Synthetic data based on sustainability concept to demonstrate DRIFT DETECTION
+-> greenwashing if all 3 true (companies matching all conditions then greenwashing = 1)
+   Revenue ↑
+   Emissions ↓
+   Carbon intensity ↓
+   ESG ↑
 """
 
 import pandas as pd
@@ -25,22 +25,22 @@ sector_params = {
         "s1_change": (-0.20, 0.15),
         "s2_change": (-0.25, 0.10),
         "s3_change": (-0.15, 0.10),
-        "esg_change": (3, 10)
+        "esg_change": (3, 10),
     },
     "Utilities": {
         "rev_growth": (0.04, 0.15),
         "s1_change": (-0.15, -0.02),
         "s2_change": (-0.20, -0.05),
         "s3_change": (-0.10, 0.00),
-        "esg_change": (5, 15)
+        "esg_change": (5, 15),
     },
     "Industrials": {
         "rev_growth": (0.03, 0.12),
         "s1_change": (-0.12, 0.03),
         "s2_change": (-0.15, -0.03),
         "s3_change": (-0.08, 0.02),
-        "esg_change": (1, 7)
-    }
+        "esg_change": (1, 7),
+    },
 }
 
 
@@ -48,11 +48,7 @@ def next_cdp(score):
     """
     Slight improvement in CDP scores.
     """
-    mapping = {
-        "B": ["B", "A-"],
-        "A-": ["A-", "A"],
-        "A": ["A"]
-    }
+    mapping = {"B": ["B", "A-"], "A-": ["A-", "A"], "A": ["A"]}
     return np.random.choice(mapping.get(score, [score]))
 
 
@@ -63,7 +59,8 @@ def create_greenwashing_flag(row):
     """
     suspicious = (
         row["esg_score_0_100"] > 75
-        and row["carbon_intensity_tco2e_per_musd"] > row["baseline_carbon_intensity"] * 0.95
+        and row["carbon_intensity_tco2e_per_musd"]
+        > row["baseline_carbon_intensity"] * 0.95
         and row["yoy_scope1_change_pct"] > 0
     )
 
@@ -104,26 +101,22 @@ def generate_year(df_prev, target_year):
 
         df.at[idx, "total_s1_s2_mt_co2e"] = round(total, 2)
 
-        yoy = ((new_s1 - row["scope1_emissions_mt_co2e"])
-               / row["scope1_emissions_mt_co2e"]) * 100
+        yoy = (
+            (new_s1 - row["scope1_emissions_mt_co2e"]) / row["scope1_emissions_mt_co2e"]
+        ) * 100
 
         df.at[idx, "yoy_scope1_change_pct"] = round(yoy, 2)
 
         carbon_intensity = total / df.at[idx, "revenue_usd_bn"]
 
-        df.at[idx, "carbon_intensity_tco2e_per_musd"] = round(
-            carbon_intensity, 2
-        )
+        df.at[idx, "carbon_intensity_tco2e_per_musd"] = round(carbon_intensity, 2)
 
         # ESG improvement
         df.at[idx, "esg_score_0_100"] = round(
-            min(100, row["esg_score_0_100"] + esg_gain),
-            1
+            min(100, row["esg_score_0_100"] + esg_gain), 1
         )
 
-        df.at[idx, "cdp_climate_score"] = next_cdp(
-            row["cdp_climate_score"]
-        )
+        df.at[idx, "cdp_climate_score"] = next_cdp(row["cdp_climate_score"])
 
     # store previous CI for labeling
     df["baseline_carbon_intensity"] = baseline_ci
@@ -132,10 +125,7 @@ def generate_year(df_prev, target_year):
     df["year"] = target_year
 
     # concept drift label
-    df["greenwashing_flag"] = df.apply(
-        create_greenwashing_flag,
-        axis=1
-    )
+    df["greenwashing_flag"] = df.apply(create_greenwashing_flag, axis=1)
 
     df.drop(columns=["baseline_carbon_intensity"], inplace=True)
 
@@ -159,15 +149,9 @@ df_2026 = generate_year(df_2025, 2026)
 # df_2026.to_csv("esg_2026_synthetic.csv", index=False)
 
 # Combined file
-combined = pd.concat(
-    [df_2025, df_2026],
-    ignore_index=True
-)
+combined = pd.concat([df_2025, df_2026], ignore_index=True)
 
-combined.to_csv(
-    "artifacts/esg_2024_2026_combined.csv",
-    index=False
-)
+combined.to_csv("artifacts/esg_2024_2026_combined.csv", index=False)
 
 print("Saved:")
 # print(" - esg_2025_synthetic.csv")

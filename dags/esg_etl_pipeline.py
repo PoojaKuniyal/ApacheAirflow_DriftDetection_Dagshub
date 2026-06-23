@@ -12,6 +12,7 @@ from src.custom_exception import *
 
 logger = logging.getLogger("airflow.task")
 
+
 # EXTRACT
 def extract():
     try:
@@ -24,6 +25,7 @@ def extract():
         logger.exception("Extract failed")
         raise
 
+
 # TRANSFORM STEP
 def transform():
     try:
@@ -33,54 +35,46 @@ def transform():
         # remmove duplicates
         df.drop_duplicates(inplace=True)
 
-        # Create flag -- This marks rows where the year-on-year percentage change is missing (which happens for the first year). 
-        df['is_first_year'] = df['yoy_scope1_change_pct'].isnull().astype(int)
+        # Create flag -- This marks rows where the year-on-year percentage change is missing (which happens for the first year).
+        df["is_first_year"] = df["yoy_scope1_change_pct"].isnull().astype(int)
         # Impute nulls with 0 (or sentinel like -999)
-        df['yoy_scope1_change_pct'] = df['yoy_scope1_change_pct'].fillna(-999)
+        df["yoy_scope1_change_pct"] = df["yoy_scope1_change_pct"].fillna(-999)
 
         # drop
-        df.drop(columns=['company','ticker'], inplace=True)
+        df.drop(columns=["company", "ticker"], inplace=True)
         logger.info("Transformation completed")
         df.to_csv(TRANSFORM_CSV, index=False)
 
     except Exception as e:
         logger.exception("Transform failed")
-        raise   
+        raise
 
-# LOAD 
+
+# LOAD
 def load_to_sql():
     try:
-        conn = BaseHook.get_connection('postgres_default')
-        engine = sqlalchemy.create_engine(f"postgresql+psycopg2://{conn.login}:{conn.password}@esg_ff036e-postgres-1:{conn.port}/{conn.schema}")
+        conn = BaseHook.get_connection("postgres_default")
+        engine = sqlalchemy.create_engine(
+            f"postgresql+psycopg2://{conn.login}:{conn.password}@esg_ff036e-postgres-1:{conn.port}/{conn.schema}"
+        )
         df = pd.read_csv(TRANSFORM_CSV)
-        df.to_sql(name='ESG', con=engine, if_exists='replace', index=False)
-        logger.info('Loaded to postgres sql....')
+        df.to_sql(name="ESG", con=engine, if_exists="replace", index=False)
+        logger.info("Loaded to postgres sql....")
     except Exception as e:
         logger.exception("loading to postgres failed")
         raise
 
+
 # Define the DAG
 with DAG(
-    dag_id='esg_etl',
-    start_date=datetime(2025,1,1),
-    schedule=None,
-    catchup=False
-        ) as dag:
-    
-    extract_task = PythonOperator(
-        task_id = 'extract',
-        python_callable = extract
-    )
+    dag_id="esg_etl", start_date=datetime(2025, 1, 1), schedule=None, catchup=False
+) as dag:
 
-    transform_task  = PythonOperator(
-        task_id = 'transform',
-        python_callable = transform
-    )
+    extract_task = PythonOperator(task_id="extract", python_callable=extract)
 
-    load_task = PythonOperator(
-        task_id = 'load',
-        python_callable = load_to_sql
-    )
+    transform_task = PythonOperator(task_id="transform", python_callable=transform)
+
+    load_task = PythonOperator(task_id="load", python_callable=load_to_sql)
     extract_task >> transform_task >> load_task
 
 

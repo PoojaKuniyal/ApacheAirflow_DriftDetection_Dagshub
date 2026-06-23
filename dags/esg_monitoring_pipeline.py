@@ -6,12 +6,11 @@ from src.monitoring.store_metrics import store_monitoring_metrics
 
 with DAG(
     dag_id="monitoring_pipeline",
-    start_date=datetime(2025,1,1),
+    start_date=datetime(2025, 1, 1),
     schedule="@daily",
-    catchup=False
+    catchup=False,
 ) as dag:
 
     monitoring_task = PythonOperator(
-        task_id="monitoring",
-        python_callable=store_monitoring_metrics
+        task_id="monitoring", python_callable=store_monitoring_metrics
     )

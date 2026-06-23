@@ -1,20 +1,20 @@
 """
 Centralized Artifact Management
 
-This module provides utilities for saving and loading processed artifacts 
+This module provides utilities for saving and loading processed artifacts
 (e.g., transformers, encoders, datasets) in a reproducible way.
 
 - Centralized file:
-    Responsible for logging processed artifacts to MLflow/DagsHub so they 
+    Responsible for logging processed artifacts to MLflow/DagsHub so they
     can be tracked, versioned, and reused across downstream DAG tasks.
 
 - Helper file:
-    Handles local persistence and retrieval. Artifacts are saved locally 
-    and, if MLflow/DagsHub is available, also logged remotely. When loading, 
-    the helper first attempts to read from local storage; if absent, it 
+    Handles local persistence and retrieval. Artifacts are saved locally
+    and, if MLflow/DagsHub is available, also logged remotely. When loading,
+    the helper first attempts to read from local storage; if absent, it
     fetches the latest artifact from MLflow/DagsHub.
 
-This design ensures reproducibility, portability, and resilience across 
+This design ensures reproducibility, portability, and resilience across
 Airflow/Docker/DagsHub environments.
 """
 
@@ -48,8 +48,8 @@ def _configure_experiment():
 @contextmanager
 def processed_artifact_run(run_name="processed-artifacts"):
     """Create a run for processed artifacts unless the caller already has one."""
-    if mlflow.active_run() is not None: 
-        yield mlflow.active_run() # guarantees that the artifact logging happens inside a valid MLflow run, without worrying whether one was already active.
+    if mlflow.active_run() is not None:
+        yield mlflow.active_run()  # guarantees that the artifact logging happens inside a valid MLflow run, without worrying whether one was already active.
         return
 
     _configure_experiment()
@@ -118,8 +118,9 @@ def _get_latest_processed_run_id():
 
     runs = client.search_runs(
         experiment_ids=[experiment.experiment_id],
-        filter_string=("attributes.status = 'FINISHED'"
-                       "and tags.artifact_stage = 'processed'"), # "and tags.artifact_stage = 'processed'" avoids accidentally downloading some unrelated run.
+        filter_string=(
+            "attributes.status = 'FINISHED'" "and tags.artifact_stage = 'processed'"
+        ),  # "and tags.artifact_stage = 'processed'" avoids accidentally downloading some unrelated run.
         order_by=["attributes.start_time DESC"],
         max_results=1,
     )
