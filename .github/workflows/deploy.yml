@@ -32,8 +32,9 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: | # Runtime dependencies Needed for your project to run and deployment dependencies Needed for code quality (black, flake8 pytest)
+          pip install -r requirements.txt      
+          pip install black flake8 pytest 
 
       - name: Run Black formatting check
         run: |
