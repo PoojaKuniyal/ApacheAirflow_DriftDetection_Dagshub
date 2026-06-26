@@ -1,45 +1,169 @@
-Overview
-========
+# 🌱 Greenwashing Detection MLOps Pipeline using Apache Airflow, DagsHub & Drift Monitoring
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+## 📌 Business Problem
 
-Project Contents
-================
+Many organizations publicly claim to be environmentally responsible while their reported ESG indicators suggest otherwise. This practice, known as **Greenwashing**, makes it difficult for investors, regulators, and stakeholders to identify genuinely sustainable companies.
 
-Your Astro project contains the following files and folders:
+This project builds an **end-to-end MLOps pipeline** to detect potential greenwashing using ESG data while demonstrating production-oriented workflow orchestration, experiment tracking, artifact management, continuous integration, and model monitoring.
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+---
 
-Deploy Your Project Locally
-===========================
+## 🎥 Demo
 
-Start Airflow on your local machine by running 'astro dev start'.
+**Project Demo**
 
-This command will spin up five Docker containers on your machine, each for a different Airflow component:
+https://vimeo.com/1204773035?share=copy&fl=sv&fe=ci
 
-- Postgres: Airflow's Metadata Database
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- DAG Processor: The Airflow component responsible for parsing DAGs
-- API Server: The Airflow component responsible for serving the Airflow UI and API
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+---
 
-When all five containers are ready the command will open the browser to the Airflow UI at http://localhost:8080/. You should also be able to access your Postgres Database at 'localhost:5432/postgres' with username 'postgres' and password 'postgres'.
+# Architecture
 
-Note: If you already have either of the above ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+```text
+                       ESG CSV Dataset
+                              │
+                              ▼
+                 Airflow ETL Pipeline DAG
+         (Extract → Transform → Validate → Load)
+                              │
+                              ▼
+                        PostgreSQL
+                    (Central Data Store)
+                              │
+                              ▼
+              Airflow Training Pipeline DAG
+      Data Processing
+      → Train/Test Split
+      → Feature Engineering
+      → Model Training
+      → Model Evaluation
+                              │
+             ┌────────────────┴────────────────┐
+             │                                 │
+             ▼                                 ▼
+      Trained Model                     DagsHub (MLflow)
+                                        • Experiment Tracking
+                                        • Dataset Versioning
+                                        • Model Artifacts
+                                        • Processed Artifacts
+                              │
+                              ▼
+              Airflow Monitoring Pipeline DAG
+      • Evidently Data Drift Detection
+      • Model Performance Monitoring
+      • Drift Metrics Logging
+                              │
+             ┌────────────────┴────────────────┐
+             │                                 │
+             ▼                                 ▼
+      PostgreSQL                     DagsHub
+      Prediction Logs                Monitoring Metrics
+                                     Drift Reports
+```
 
-Deploy Your Project to Astronomer
-=================================
+---
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+# Tech Stack
 
-Contact
-=======
+* Apache Airflow (**workflow orchestrator**)
+* PostgreSQL  (**datawarehouse**)
+* Scikit-learn
+* Evidently AI
+* DagsHub (MLflow)
+* GitHub Actions
+* Docker
+* SQLAlchemy
+* Pandas
+* Joblib
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+---
+
+### Logged artifacts include:
+
+* Random Forest model
+* Encoders
+* Power Transformer
+* Processed datasets
+* Evaluation metrics
+
+---
+
+### Data Drift
+
+Implemented using **Evidently AI**.
+
+Detects changes in incoming ESG data distribution compared to the training data.
+
+### Model Monitoring
+
+Tracks:
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+
+Performance degradation is logged over time.
+
+Monitoring metrics are:
+
+* Stored in PostgreSQL
+* Logged to DagsHub
+
+---
+
+# Simulating Production Data
+
+Since this project is not connected to a live prediction API, there are no real incoming prediction requests.
+
+To simulate a production environment:
+
+* 2024 ESG records were used to generate synthetic 2025 and 2026 datasets.
+* These synthetic records represent "current production data".
+
+This mimics a real deployment where:
+
+Reference Data = Training Dataset
+
+Current Data = Incoming Prediction Requests
+
+allowing realistic demonstration of drift detection.
+
+---
+
+# CI Pipeline
+
+GitHub Actions is used for Continuous Integration.
+
+Current CI performs:
+
+* Dependency installation
+* Code formatting verification using Black
+
+This ensures every push is automatically validated before merging.
+
+Airflow orchestration remains independent of CI.
+
+---
+
+# DagsHub Integration
+
+The project uses DagsHub as the MLflow Tracking Server for:
+
+* Experiment Tracking
+* Dataset Versioning
+* Model Artifact Storage
+* Processed Artifact Storage
+* Monitoring Metric Logging
+
+Training and monitoring pipelines log directly to DagsHub from within Airflow tasks.
+
+---
+
+# Future Improvements
+
+* FastAPI deployment
+* Model Registry based deployment
+* Automated retraining pipeline
+* Slack/Email drift alerts
+* Grafana dashboard integration
+* Kubernetes deployment
