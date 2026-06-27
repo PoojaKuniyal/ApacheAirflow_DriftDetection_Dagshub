@@ -49,7 +49,7 @@ https://vimeo.com/1204773035?share=copy&fl=sv&fe=ci
                               ▼
               Airflow Monitoring Pipeline DAG
       • Evidently Data Drift Detection
-      • Model Performance Monitoring
+      • Model Performance Monitoring (MODEL DRIFT)
       • Drift Metrics Logging
                               │
              ┌────────────────┴────────────────┐
@@ -77,13 +77,7 @@ https://vimeo.com/1204773035?share=copy&fl=sv&fe=ci
 
 ---
 
-### Logged artifacts include:
-
-* Random Forest model
-* Encoders
-* Power Transformer
-* Processed datasets
-* Evaluation metrics
+**Docker**: Containerized Apache Airflow using Docker to orchestrate ETL, training, and monitoring workflows in a reproducible environment.
 
 ---
 
@@ -97,17 +91,24 @@ Detects changes in incoming ESG data distribution compared to the training data.
 
 Tracks:
 
-* Accuracy
-* Precision
-* Recall
-* F1 Score
+* Accuracy (0.98)
+* Precision (1.0)
+* Recall (0.92)
+* F1 Score (0.96)
 
 Performance degradation is logged over time.
 
+* Accuracy drop
+* Precision drop
+* Recall drop
+* F1 drop
+* Drift Score
+* Drift Detected
+
 Monitoring metrics are:
 
-* Stored in PostgreSQL
-* Logged to DagsHub
+* *Stored in PostgreSQL*
+* *Logged to DagsHub*
 
 ---
 
@@ -149,21 +150,17 @@ Airflow orchestration remains independent of CI.
 
 The project uses DagsHub as the MLflow Tracking Server for:
 
-* Experiment Tracking
-* Dataset Versioning
-* Model Artifact Storage
-* Processed Artifact Storage
-* Monitoring Metric Logging
+* Experiment Tracking (metrics, hyper parameters)
+* Dataset Versioning (train)
+* Model Artifact Storage (Random Forest)
+* Processed Artifact Storage (OneHotEncoded, PowerTransformer)
+* Monitoring Metric Logging 
 
-Training and monitoring pipelines log directly to DagsHub from within Airflow tasks.
+*Training and monitoring pipelines log directly to DagsHub from within Airflow tasks.*
 
 ---
+# ML 
+**Power Transformer** for skewed feature normalization, **SMOTE** for class imbalance handling, **feature engineering**, train/test splitting, Random Forest model training.
 
-# Future Improvements
-
-* FastAPI deployment
-* Model Registry based deployment
-* Automated retraining pipeline
-* Slack/Email drift alerts
-* Grafana dashboard integration
-* Kubernetes deployment
+---
+*After starting Astro (e.g., **astro dev start**), DAGs are **triggered** from the Airflow UI, where task execution, logs, retries, and success/failure status can be monitored in real time.*
